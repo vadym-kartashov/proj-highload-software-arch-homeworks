@@ -1,0 +1,100 @@
+version: '1.0'
+services:
+  telegraf:
+    image: telegraf:1.18-alpine
+    platform: linux/amd64
+    volumes:
+    - ./telegraf/etc/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    - /var/run/docker.sock:/var/run/docker.sock
+#    - /:/hostfs:ro
+    entrypoint: /bin/bash -c "chmod 666 /var/run/docker.sock && /entrypoint.sh telegraf"
+#    environment:
+#      - HOST_ETC=/hostfs/etc
+#      - HOST_PROC=/hostfs/proc
+#      - HOST_SYS=/hostfs/sys
+#      - HOST_VAR=/hostfs/var
+#      - HOST_RUN=/hostfs/run
+#      - HOST_MOUNT_PREFIX=/hostfs
+    depends_on:
+      - influxdb
+    ports:
+    - '127.0.0.1:8125:8125/udp'
+
+  influxdb:
+    image: influxdb:1.8-alpine
+    platform: linux/amd64
+    env_file: configuration.env
+    ports:
+      - '127.0.0.1:8086:8086'
+    volumes:
+      - ./:/imports
+      - influxdb_data:/var/lib/influxdb
+
+  grafana:
+    image: grafana/grafana:8.0.2
+    depends_on:
+      - influxdb
+    env_file: configuration.env
+#    networks:
+#      - backbone
+    ports:
+      - '127.0.0.1:3000:3000'
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+      - ./grafana/dashboards/:/var/lib/grafana/dashboards/
+
+  mongo:
+    image: mongo:4.4.6
+    ports:
+      - '127.0.0.1:27017:27017'
+    env_file: configuration.env
+    volumes:
+      - mongo:/data/db
+      - mongo_config:/data/configdb
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.8.2
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+
+  java-app:
+    build:
+      context: ./java-sample-app
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    depends_on:
+      - mongo
+      - elasticsearch
+    env_file: configuration.env
+
+  nginx:
+    image: nginx:1.21.1-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/logs:/var/log/nginx
+    depends_on:
+      - java-app
+
+networks:
+  backbone:
+    driver: bridge
+
+volumes:
+  grafana_data: {}
+  influxdb_data: {}
+  elasticsearch-data: {}
+  mongo: {}
+  mongo_config: {}
+

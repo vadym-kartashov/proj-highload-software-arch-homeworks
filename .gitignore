@@ -1,0 +1,6 @@
+/nginx/logs/
+/java-sample-app/target/
+/load_test_results_random.log
+/random.siege
+/.idea
+/hla3.iml
