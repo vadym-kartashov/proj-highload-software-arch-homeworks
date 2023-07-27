@@ -7,7 +7,8 @@ Java 17 (to build java sample app)
 Run 'build_and_deploy.sh' script in root directory of project
 
 ### Running load on system:
-Run 'siege_it.sh' script in root directory of project
+Run 'siege_it.sh 10 1 0' script in root directory of project,
+Where 10 is number of concurrent workers, 1 load time in minutes, 0 time between requrests
 
 ### Result on local environment
 (Load has been generated between 15:17 and 15:27)
