@@ -20,9 +20,14 @@ Where 10 is number of concurrent workers, 1 load time in minutes, 0 time between
 ### Stress test results (Homework #5)
 
 Run with N concurrent workers (where N in (10,25,50,100)), 5 minute load time, 0 seconds between requests
-CMD: ./siege_it.sh $N 5 0
 
-Since CPU has 8 cores, having more concurrent workers  will bring performance degradation. 
+Command that is used for stress testing: [./siege_it.sh](siege_it.sh) $N 5 0
+
+URLs file is generated through [./prepare_for_siege.sh](prepare_for_siege.sh) command
+
+Example of such file is shown within [random.siege](random.siege) file
+
+Test results: Since CPU has 8 cores, having more concurrent workers  will bring performance degradation. 
 Table with results:
 
 | Metric                       | Concurrency 10 | Concurrency 25 | Concurrency 50 | Concurrency 100  |
