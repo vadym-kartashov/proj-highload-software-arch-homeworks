@@ -2,8 +2,8 @@
 
 # Function to generate random strings
 randstring() {
-  strings=("$@")
-  echo ${strings[$RANDOM % ${#strings[@]}]}
+  len=$1
+  echo $(mktemp -u XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX | cut -c -"$len")
 }
 
 # Function to generate a random integer in a given range
@@ -18,14 +18,13 @@ output_file="random.siege"
 echo "" > "$output_file"
 
 # Generate 100 random requests and append them to the output file
-for i in {1..100}; do
+for i in {1..10000}; do
   # Random values for GET /people/{id} endpoint
-  get_id=$(randint 1 100000)
-  get_request="http://localhost/people/$get_id"
+  get_request="http://localhost/people/$i"
 
   # Random values for POST /people endpoint with JSON payload
-  post_id=$get_id
-  post_name=$(randstring "John" "Alice" "Bob")
+  post_id=$i
+  post_name=$(randstring 33) # Generate a random 5-character string for name
   post_age=$(randint 18 60)
   post_request="http://localhost/people POST {\"id\": \"$post_id\", \"name\": \"$post_name\", \"age\": $post_age}"
 
