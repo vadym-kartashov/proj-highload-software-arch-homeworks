@@ -1,5 +1,6 @@
 package org.vkartashov.hla4;
 
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,8 @@ import org.vkartashov.hla4.util.Utils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.stream.Collectors;
 
 import static org.vkartashov.hla4.util.Constants.*;
@@ -40,8 +43,20 @@ public class Hla4Application implements CommandLineRunner {
 				.run(args);
 	}
 
+	// Entry point
 	@Override
 	public void run(String... args) {
+		TimerTask task = new TimerTask() {
+			public void run() {
+				generateEcoBotAnalyticsData();
+			}
+		};
+		Timer timer = new Timer("PollutedAirInKyivAnalyticsPushingTimer");
+		long eachHourDelay = 1000 * 60 * 60;
+		timer.scheduleAtFixedRate(task, 0,eachHourDelay);
+	}
+
+	private void generateEcoBotAnalyticsData() {
 		LOG.info("Start worker");
 		List<EcoBotDataEntryDto> entries = saveEcoBotServiceClient.fetchData();
 		LOG.info("Fetched {} entries from SaveEcoBot", entries.size());
