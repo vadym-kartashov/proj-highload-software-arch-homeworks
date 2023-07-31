@@ -36,7 +36,7 @@ public class UserDao {
     }
 
     private int countUsersWithDateCondition(Date date, UserIndexedDateOfBirthField field, DateCondition condition) {
-        return queryCount(String.format("SELECT COUNT(*) FROM users WHERE %s %s ?", field.getFieldName(), condition.getOperator()), date);
+        return queryCount(String.format("SELECT SQL_NO_CACHE COUNT(*) FROM users WHERE %s %s ?", field.getFieldName(), condition.getOperator()), date);
     }
 
     public void createUser(String firstName, String lastName, Date dateOfBirth) {
