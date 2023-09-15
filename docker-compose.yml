@@ -1,0 +1,85 @@
+version: '1.0'
+services:
+
+  beanstalkd:
+    image: touchify/beanstalkd
+    ports:
+      - "11300:11300"
+    environment:
+      - BEANSTALKD_FSYNC_DISABLE=true
+      - BEANSTALKD_VERBOSE=1
+      - BEANSTALKD_JOB_MAX_SIZE=10000000
+    command: beanstalkd -b /var/lib/beanstalkd # This configures beanstalkd to use disk persistence
+
+  beanstalkd_persistent:
+    image: maateen/docker-beanstalkd
+    ports:
+      - "11301:11300"
+    environment:
+      - BEANSTALKD_FSYNC_DISABLE=false
+      - BEANSTALKD_FSYNC_INTERVAL=1000
+      - BEANSTALKD_VERBOSE=1
+      - BEANSTALKD_JOB_MAX_SIZE=10000000
+    volumes:
+      - ./beanstalkd_data:/var/lib/beanstalkd
+
+  redis_no_persistence:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    command: [ "redis-server", "--save", "" ]
+
+  redis_rdb:
+    image: redis:latest
+    ports:
+      - "6380:6379"
+    command: [ "redis-server", "--save", "1 100", "--appendonly", "no" ]
+
+  redis_aof:
+    image: redis:latest
+    ports:
+      - "6381:6379"
+    command: ["redis-server", "--appendonly", "yes", "--appendfsync", "everysec"]
+
+  telegraf:
+    image: telegraf:1.18-alpine
+    platform: linux/amd64
+    volumes:
+      - ./telegraf/etc/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    entrypoint: /bin/bash -c "chmod 666 /var/run/docker.sock && /entrypoint.sh telegraf"
+    depends_on:
+      - influxdb
+    ports:
+      - '127.0.0.1:8125:8125/udp'
+
+  influxdb:
+    image: influxdb:1.8-alpine
+    platform: linux/amd64
+    env_file: configuration.env
+    ports:
+      - '127.0.0.1:8086:8086'
+    volumes:
+      - ./:/imports
+      - influxdb_data:/var/lib/influxdb
+
+  grafana:
+    image: grafana/grafana
+    depends_on:
+      - influxdb
+    env_file: configuration.env
+    #    networks:
+    #      - backbone
+    ports:
+      - '127.0.0.1:3000:3000'
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+      - ./grafana/dashboards/:/var/lib/grafana/dashboards/
+
+volumes:
+  beanstalkd_data:
+  redis-rdb-data:
+  redis-aof-data:
+  grafana_data:
+  influxdb_data:
