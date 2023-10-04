@@ -12,7 +12,7 @@ There are two approaches possible:
 1) Use build in locking functionality. However S3 locking requires versioning to be enabled on this bucket. In general file version stays unmodifiable, on any change new version will be created or specific version will be marked as deleted.
 2) Use permissions policy. Here we are using regular S3 bucket, but we restrict any altering actions for the specific file. Any change to file will be rejected with S3 access denied
 #### Use build in locking functionality
-```json
+```
 // Bucket versioning configuration
 vkartashov@MacBook-Pro-5 ~ % aws s3api get-bucket-versioning  --bucket hla-my-first-bucket       
 {
@@ -61,7 +61,7 @@ An error occurred (404) when calling the HeadObject operation: Not Found
 
 ```
 #### Use permissions policy
-```json
+```
 // Permission policies are defined for bucket to not allo any PUT or DELETE operations
 vkartashov@MacBook-Pro-5 ~ % aws s3api get-bucket-policy --bucket hla-my-first-bucket-v1     
 {
