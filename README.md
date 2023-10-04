@@ -5,8 +5,8 @@
 Create S3 bucket where objects can’t be modified and all requests are logged.
 ### Enabling logging:
 This one is simple. Enable logging in bucket configuration and specify target bucket different from logging one to avoid duplicate logging.
-![Log configuration](./screenshots/Log configuration.png)
-![Log entries](./screenshots/Log entries.png)
+![Log configuration](./screenshots/Log-configuration.png)
+![Log entries](./screenshots/Log-entries.png)
 ### File locking approach:
 There are two approaches possible:
 1) Use build in locking functionality. However S3 locking requires versioning to be enabled on this bucket. In general file version stays unmodifiable, on any change new version will be created or specific version will be marked as deleted.
