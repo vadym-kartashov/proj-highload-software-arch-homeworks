@@ -20,7 +20,7 @@ Testing is done on 4 different datasets:
 ![SearchMidValue50%](img/SearchMidValue50%25.jpg)
 #### Search Max Value from range (100% out of N)
 ![SearchMaxValue100%](img/SearchMaxValue100%25.jpg)
-#### Search avg value after rebalancing trees (1 out of N)
+#### Search avg value after rebalancing trees (25% out of N)
 ![SearchAvgValue25Balanced](img/SearchAvgValue25%25Balanced.jpg)
 ### Counting Sort
 Counting sort performs bad in case if there is a big range of values in array
