@@ -23,6 +23,7 @@ Testing is done on 4 different datasets:
 #### Search avg value after rebalancing trees (25% out of N)
 ![SearchAvgValue25Balanced](img/SearchAvgValue25%25Balanced.jpg)
 ### Counting Sort
+Implementation is provided under [CountingSort](src/main/java/org/vkartashov/collections/SortingUtil.java). <br/>
 Counting sort performs bad in case if there is a big range of values in array
 Data is tested on 2 different datasets:
 1) Dataset where range of possible values is less than size of dataset (Best case)
