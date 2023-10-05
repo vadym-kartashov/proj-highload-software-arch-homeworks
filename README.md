@@ -1,10 +1,10 @@
 # hla20 Data Structures and Algorithms
 
 ## BST and Counting Sort
-Implement class for Balanced Binary Search Tree that can insert, find and delete elements.
-Generate 100 random datasets and measure complexity
-Implement Counting Sort algorithm
-Figure out when Counting Sort doesn’t perform.
+Implement class for Balanced Binary Search Tree that can insert, find and delete elements. <br/>
+Generate 100 random datasets and measure complexity <br/>
+Implement Counting Sort algorithm <br/>
+Figure out when Counting Sort doesn’t perform. <br/>
 ### Binary search tree
 Implementation is provided under [BalanceBinarySearchTree](src/main/java/org/vkartashov/collections/BalancedBinarySearchTree.java).
 Testing is done on 4 different datasets:
@@ -20,8 +20,8 @@ Testing is done on 4 different datasets:
 ![SearchMidValue50%](img/SearchMidValue50%25.jpg)
 #### Search Max Value from range (100% out of N)
 ![SearchMaxValue100%](img/SearchMaxValue100%25.jpg)
-#### Search Min Value from range (1 out of N)
-![SearchAvgValue25%](img/SearchAvgValue25%25Balanced.jpg)
+#### Search avg value after rebalancing trees (1 out of N)
+![SearchAvgValue25Balanced](img/SearchAvgValue25%25Balanced.jpg)
 ### Counting Sort
 Counting sort performs bad in case if there is a big range of values in array
 Data is tested on 2 different datasets:
