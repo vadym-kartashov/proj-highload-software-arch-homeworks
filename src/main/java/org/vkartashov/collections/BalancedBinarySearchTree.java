@@ -1,6 +1,11 @@
 package org.vkartashov.collections;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BalancedBinarySearchTree<T extends Comparable<T>> {
+
+    private int size = 0;
 
     private Node<T> root;
 
@@ -22,6 +27,7 @@ public class BalancedBinarySearchTree<T extends Comparable<T>> {
 
     public void insert(T data) {
         this.root = insert(this.root, data);
+        size++;
     }
 
     private Node<T> insert(Node<T> node, T data) {
@@ -48,6 +54,12 @@ public class BalancedBinarySearchTree<T extends Comparable<T>> {
     }
 
     private Node<T> find(Node<T> node, T data) {
+        try {
+            Thread.sleep(100);
+//            System.out.println(size + "Searching in node " + node.data + "L: " + (node.left == null ? "null" : node.left.data) + "R: " + (node.right == null ? "null" : node.right.data));
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         if (node == null) {
             return null;
         }
@@ -63,6 +75,7 @@ public class BalancedBinarySearchTree<T extends Comparable<T>> {
 
     public void delete(T data) {
         this.root = delete(this.root, data);
+        size--;
     }
 
     private Node<T> delete(Node<T> node, T data) {
@@ -106,28 +119,44 @@ public class BalancedBinarySearchTree<T extends Comparable<T>> {
     }
 
     public void balance() {
-        balance(root);
+        this.root = balance(this.root);
     }
 
-    private void balance(Node<T> node) {
-        if (node == null) {
+    private Node<T> balance(Node<T> root) {
+        if (root == null) {
+            return null;
+        }
+
+        // Inorder traversal of the BST.
+        List<T> sortedList = new ArrayList<>();
+        inorderTraversal(root, sortedList);
+
+        // Build a balanced BST from the sorted list.
+        return buildBalancedBST(sortedList, 0, sortedList.size() - 1);
+    }
+
+    private void inorderTraversal(Node<T> root, List<T> sortedList) {
+        if (root == null) {
             return;
         }
 
-        int leftHeight = height(node.left);
-        int rightHeight = height(node.right);
+        inorderTraversal(root.left, sortedList);
+        sortedList.add(root.data);
+        inorderTraversal(root.right, sortedList);
+    }
 
-        if (rightHeight - leftHeight > 1) {
-            // Right subtree is taller, so rotate left.
-            rotateLeft(node);
-        } else if (leftHeight - rightHeight > 1) {
-            // Left subtree is taller, so rotate right.
-            rotateRight(node);
+    private Node<T> buildBalancedBST(List<T> sortedList, int start, int end) {
+        if (start > end) {
+            return null;
         }
 
-        // Balance the left and right subtrees.
-        balance(node.left);
-        balance(node.right);
+        int mid = (start + end) / 2;
+        Node<T> root = new Node<T>(sortedList.get(mid));
+
+        root.left = buildBalancedBST(sortedList, start, mid - 1);
+        root.right = buildBalancedBST(sortedList, mid + 1, end);
+
+        return root;
     }
 
     private int height(Node<T> node) {
@@ -136,20 +165,6 @@ public class BalancedBinarySearchTree<T extends Comparable<T>> {
         }
 
         return Math.max(height(node.left), height(node.right)) + 1;
-    }
-
-    private void rotateLeft(Node<T> node) {
-        Node<T> rightChild = node.right;
-
-        node.right = rightChild.left;
-        rightChild.left = node;
-    }
-
-    private void rotateRight(Node<T> node) {
-        Node<T> leftChild = node.left;
-
-        node.left = leftChild.right;
-        leftChild.right = node;
     }
 
     public boolean isBalanced() {
@@ -173,6 +188,10 @@ public class BalancedBinarySearchTree<T extends Comparable<T>> {
 
     public boolean isEmpty() {
         return root == null;
+    }
+
+    public int size() {
+        return size;
     }
 
 }
