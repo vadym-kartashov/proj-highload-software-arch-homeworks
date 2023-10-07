@@ -1,0 +1,1 @@
+# hla30-aws-autoscale
