@@ -22,9 +22,10 @@ jobs:
         run: ls
       - name: Build with Gradle
         run: |
-          ./backend/gradlew bootJar -p backend
+          ./backend/gradlew build bootJar -p backend
 
   publish:
+    needs: [build]
     runs-on: ubuntu-latest
     steps:
       - name: Log in to Docker Hub
