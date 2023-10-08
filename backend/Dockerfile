@@ -10,7 +10,7 @@ LABEL maintainer="your_email@example.com" \
 WORKDIR /app
 
 # Copy the jar file from the host into the current directory inside the container
-COPY backend/build/libs/*.jar app.jar
+COPY build/libs/*.jar app.jar
 
 # Set the startup command
 ENTRYPOINT ["java","-jar","app.jar"]
