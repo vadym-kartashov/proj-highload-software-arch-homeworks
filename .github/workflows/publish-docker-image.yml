@@ -25,13 +25,12 @@ jobs:
       - name: Build with Gradle
         run: |
           ./backend/gradlew build -p backend
-          cd backend
 
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ vars.DOCKER_USERNAME }}" --password-stdin
 
       - name: Build and push Docker image
         run: |
-            ls
+            cd backend
             docker build -t "${{ vars.DOCKER_USERNAME }}"/"${{ github.repository }}" .
             docker push "${{ vars.DOCKER_USERNAME }}"/"${{ github.repository }}":latest
