@@ -13,10 +13,7 @@ services:
       - pgdata:/var/lib/postgresql/data
 
   spring-boot-app:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-      image: vadymkartashov/hla26-ci-cd-image:latest
+    image: vadymkartashov/hla26-ci-cd-image:latest
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/mydb
       SPRING_DATASOURCE_USERNAME: myuser
