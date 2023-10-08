@@ -32,5 +32,6 @@ jobs:
 
       - name: Build and push Docker image
         run: |
+            ls
             docker build -t "${{ vars.DOCKER_USERNAME }}"/"${{ github.repository }}" .
             docker push "${{ vars.DOCKER_USERNAME }}"/"${{ github.repository }}":latest
