@@ -1,4 +1,4 @@
-name: Java CI with Gradle
+name: Publish Docker image
 
 on:
   push:
@@ -9,9 +9,7 @@ permissions:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
       - run: 'echo ${{github.event_name}}'
       - uses: actions/checkout@v3
@@ -24,13 +22,16 @@ jobs:
         run: ls
       - name: Build with Gradle
         run: |
-          ./backend/gradlew build -p backend
+          ./backend/gradlew bootJar -p backend
 
+  publish:
+    runs-on: ubuntu-latest
+    steps:
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ vars.DOCKER_USERNAME }}" --password-stdin
 
       - name: Build and push Docker image
         run: |
-            ls -R
-            docker build -t "${{ vars.DOCKER_USERNAME }}"/"${{ vars.image_name }}" ./backend
-            docker push "${{ vars.DOCKER_USERNAME }}"/"${{ vars.image_name }}":latest
+          ls -R
+          docker build -t "${{ vars.DOCKER_USERNAME }}"/"${{ vars.image_name }}" ./backend
+          docker push "${{ vars.DOCKER_USERNAME }}"/"${{ vars.image_name }}":latest
