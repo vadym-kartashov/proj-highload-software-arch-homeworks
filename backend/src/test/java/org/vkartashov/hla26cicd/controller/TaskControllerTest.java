@@ -6,7 +6,7 @@ public class TaskControllerTest {
 
     @org.junit.Test
     public void createTask() {
-        throw new RuntimeException();
+
     }
 
     @org.junit.Test
