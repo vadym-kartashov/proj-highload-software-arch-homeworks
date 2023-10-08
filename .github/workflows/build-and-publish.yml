@@ -42,4 +42,4 @@ jobs:
         with:
           context: ./backend
           push: true
-          tags: secrets.DOCKER_USERNAME/vars.image_name:latest
+          tags: ${{ vars.DOCKER_USERNAME }}/${{ vars.image_name }}:latest
