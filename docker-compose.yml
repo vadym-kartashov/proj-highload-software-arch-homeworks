@@ -1,0 +1,36 @@
+version: '1'
+
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  spring-boot-app:
+    build:
+      context: ./
+      dockerfile: backend/Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/mydb
+      SPRING_DATASOURCE_USERNAME: myuser
+      SPRING_DATASOURCE_PASSWORD: mypassword
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+
+#  react-app:
+#    build:
+#      context: ./path_to_react_project
+#      dockerfile: frontend/Dockerfile
+#    ports:
+#      - "80:80"
+#    depends_on:
+#      - spring-boot-app
+
+volumes:
+  pgdata:
