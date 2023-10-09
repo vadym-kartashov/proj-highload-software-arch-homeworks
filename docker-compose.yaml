@@ -1,0 +1,33 @@
+version: '1.0'
+
+services:
+  mariadb:
+    image: mariadb:10.6
+    container_name: my-mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: my_database
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb-data:/var/lib/mysql
+      - ./db-init/mariadb-init.sql:/docker-entrypoint-initdb.d/mariadb-init.sql
+
+  postgres:
+    image: postgres:13
+    container_name: my-postgres
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: my_database
+      POSTGRES_USER: admin
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./db-init/postgresql-init.sql:/docker-entrypoint-initdb.d/postgresql-init.sql
+
+volumes:
+  mariadb-data:
+  postgres-data:
