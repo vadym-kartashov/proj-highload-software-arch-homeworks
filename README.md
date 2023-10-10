@@ -19,9 +19,9 @@ To test if replication is working following steps are done:
 3) master down / slaves up and slaves status has been taken
 4) up master and check if slaves are filled up with data
 #### Steps 2-3
-![Check-replication-steps-2-3](./img/check-replication-steps-2-3.png)
+![Check-replication-steps-2-3](./img/Check-replication-steps-2-3.png)
 #### Step 4
-![Check-replication-steps-4](./img/check-replication-steps-4.png)
+![Check-replication-steps-4](./img/Check-replication-steps-4.png)
 
 ### Remove middle and last column
 1) 2 slaves has been shut down
