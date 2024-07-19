@@ -1,0 +1,15 @@
+version: "1.0"
+services:
+
+  db:
+    image: mariadb
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MARIADB_ROOT_PASSWORD: example
+    volumes:
+      - ./dbinit/:/docker-entrypoint-initdb.d
+    #command: --innodb-buffer-pool-size=8G
+    #command: --innodb-log-file-size=2G
+    command: --innodb-buffer-pool-size=8G --innodb-log-file-size=2G
